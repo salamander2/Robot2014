@@ -45,8 +45,9 @@ public class RobotMain extends IterativeRobot {
         jag1.enableDeadbandElimination(true);
         ***/
         
-        driveTrain1 = new RobotDrive(victor1, victor2);
-        driveTrain2 = new RobotDrive(victor3, victor4);
+        //reversed the motor to fix the left and right joystick
+        driveTrain1 = new RobotDrive(victor2, victor1);
+        driveTrain2 = new RobotDrive(victor4, victor3);
         
         leftStick = new Joystick(1);
         rightStick = new Joystick(2);
