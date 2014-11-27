@@ -22,7 +22,7 @@ public class RobotMain extends IterativeRobot {
     Joystick leftStick, rightStick;
     RobotDrive driveTrain1, driveTrain2;
     Victor victor1, victor2, victor3, victor4;
-    Jaguar jag1;
+    Jaguar armJaguar;
     DigitalInput limitSwitch;
     //the JoystickButton class does not exist in our Java FRC plugins!
     // JoystickButton stickLBtn1, stickLBtn2; 
@@ -36,13 +36,13 @@ public class RobotMain extends IterativeRobot {
         victor2 = new Victor(2);
         victor3 = new Victor(3);
         victor4 = new Victor(4);
-        jag1 = new Jaguar(5); //for the arm
+        armJaguar = new Jaguar(5); //for the arm
         /*** do the following lines do anything? 
         victor1.enableDeadbandElimination(true);
         victor2.enableDeadbandElimination(true);
         victor3.enableDeadbandElimination(true);
         victor4.enableDeadbandElimination(true);
-        jag1.enableDeadbandElimination(true);
+        armJaguar.enableDeadbandElimination(true);
         ***/
         
         driveTrain1 = new RobotDrive(victor1, victor2);
@@ -65,6 +65,7 @@ public class RobotMain extends IterativeRobot {
         Watchdog.getInstance().feed();
 
         normalDrive();
+        moveArm();
         //publicDrive();
         
         //check for button press to switch mode. Use two buttons to prevent bounce.
@@ -96,6 +97,11 @@ public class RobotMain extends IterativeRobot {
             driveTrain1.tankDrive(leftStick, rightStick);
             driveTrain2.tankDrive(leftStick, rightStick);
         }
+    }
+
+    private void moveArm(){
+        if(rightStick.getY()>0 && limitSwitch.get())
+            armJaguar.set(0.5);
     }
     
     // square the inputs (while preserving the sign) to increase fine control while permitting full power
