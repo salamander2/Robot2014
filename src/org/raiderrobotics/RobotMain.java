@@ -36,7 +36,7 @@ public class RobotMain extends IterativeRobot {
         victor2 = new Victor(2);
         victor3 = new Victor(3);
         victor4 = new Victor(4);
-        jag1 = new Jaguar(5); //for the arm
+        jag1 = new Jaguar(10); //for the arm
         /*** do the following lines do anything? 
         victor1.enableDeadbandElimination(true);
         victor2.enableDeadbandElimination(true);
