@@ -36,7 +36,7 @@ public class RobotMain extends IterativeRobot {
         victor2 = new Victor(2);
         victor3 = new Victor(3);
         victor4 = new Victor(4);
-        armJaguar = new Jaguar(5); //for the arm
+        armJaguar = new Jaguar(10); //for the arm
         /*** do the following lines do anything? 
         victor1.enableDeadbandElimination(true);
         victor2.enableDeadbandElimination(true);
@@ -48,8 +48,8 @@ public class RobotMain extends IterativeRobot {
         driveTrain1 = new RobotDrive(victor1, victor2);
         driveTrain2 = new RobotDrive(victor3, victor4);
         
-        leftStick = new Joystick(1);
-        rightStick = new Joystick(2);
+        leftStick = new Joystick(2);
+        rightStick = new Joystick(1);
         //stickLBtn1 = new JoystickButton(stickL, 1);
         //stickLBtn2 = new JoystickButton(stickL, 2);
         limitSwitch = new DigitalInput(5);
@@ -82,7 +82,9 @@ public class RobotMain extends IterativeRobot {
         //chassis.setSafetyEnabled(false); // or better yet: feed the watchdog regularly
     }
 
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+        
+    }
 
     public void autonomousDisabled() {
         //turn off motors here
@@ -100,18 +102,15 @@ public class RobotMain extends IterativeRobot {
     }
 
     private void moveArm(){
-        if(rightStick.getY()>0 && limitSwitch.get())
-            armJaguar.set(0.5);
+        if(driveState != TANK && limitSwitch.get() && rightStick.getY() > 0.1D ){
+            armJaguar.set(limit(rightStick.getY()));
+        } else
+            armJaguar.set(0.0);
     }
     
     // square the inputs (while preserving the sign) to increase fine control while permitting full power
     double squareInputs(double input) {
-        if (input >= 0.0) {
-            input = (input * input);
-        } else {
-            input = -(input * input);
-        }
-        return input;
+        return Math.abs(input) * input;
     }
     
     //limit values so that they are always between -1.0 and +1.0
