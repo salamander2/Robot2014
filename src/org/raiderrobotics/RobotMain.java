@@ -67,7 +67,8 @@ public class RobotMain extends IterativeRobot {
 
         normalDrive();
         //publicDrive();
-        
+        sendSmartDashboard();
+
         //check for button press to switch mode. Use two buttons to prevent bounce.
         //if (joyLeftBtn2.get()) driveState = ARCADE;
         //if (joyLeftBtn3.get()) driveState = TANK;
@@ -82,7 +83,9 @@ public class RobotMain extends IterativeRobot {
         //chassis.setSafetyEnabled(false); // or better yet: feed the watchdog regularly
     }
 
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+        sendSmartDashboard();
+    }
 
     public void autonomousDisabled() {
         //turn off motors here
@@ -114,5 +117,27 @@ public class RobotMain extends IterativeRobot {
         if (num > 1.0) return 1.0;
         if (num < -1.0) return -1.0;
         return num;
+    }
+    
+    public void sendSmartDashboard(){
+        //smartDashboardSetup-CURRENTLY UNTESTED
+        SmartDashboard.putNumber("joyRx", rightStick.getX());
+        SmartDashboard.putNumber("joyLx", leftStick.getX());
+        SmartDashboard.putNumber("joyRy", rightStick.getY());
+        SmartDashboard.putNumber("joyLy", leftStick.getY());
+        SmartDashboard.putBoolean("btn2",leftStick.getRawButton(2));
+        SmartDashboard.putBoolean("btn3",leftStick.getRawButton(3));
+        
+        SmartDashboard.putNumber("vic1",victor1.get());
+        SmartDashboard.putNumber("vic2",victor2.get());
+        SmartDashboard.putNumber("vic3",victor3.get());
+        SmartDashboard.putNumber("vic4",victor4.get());
+        SmartDashboard.putNumber("jagArm",jag1.get());
+        if(driveState==ARCADE){    
+            SmartDashboard.putString("driveState","Arcade");
+        }else{
+            SmartDashboard.putString("driveState","Tank Drive");
+        }
+        SmartDashboard.putBoolean("limitSwitch",limitSwitch.get());
     }
 }
