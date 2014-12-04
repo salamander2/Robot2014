@@ -24,6 +24,7 @@ public class RobotMain extends IterativeRobot {
     Victor victor1, victor2, victor3, victor4;
     Jaguar armJaguar;
     DigitalInput limitSwitch;
+    DigitalInput armSensor;
     //the JoystickButton class does not exist in our Java FRC plugins!
     // JoystickButton stickLBtn1, stickLBtn2; 
 
@@ -45,14 +46,15 @@ public class RobotMain extends IterativeRobot {
         armJaguar.enableDeadbandElimination(true);
         ***/
         
-        driveTrain1 = new RobotDrive(victor1, victor2);
-        driveTrain2 = new RobotDrive(victor3, victor4);
+        driveTrain1 = new RobotDrive(victor2, victor1);
+        driveTrain2 = new RobotDrive(victor4, victor3);
         
         leftStick = new Joystick(2);
         rightStick = new Joystick(1);
         //stickLBtn1 = new JoystickButton(stickL, 1);
         //stickLBtn2 = new JoystickButton(stickL, 2);
         limitSwitch = new DigitalInput(5);
+        armSensor = new DigitalInput(10);
     }
 
     public void teleopInit() {
@@ -66,6 +68,8 @@ public class RobotMain extends IterativeRobot {
 
         normalDrive();
         moveArm();
+//        checkArmSensor(); //Remove for now
+        
         //publicDrive();
         
         //check for button press to switch mode. Use two buttons to prevent bounce.
@@ -102,10 +106,19 @@ public class RobotMain extends IterativeRobot {
     }
 
     private void moveArm(){
-        if(driveState != TANK && limitSwitch.get() && rightStick.getY() > 0.1D ){
-            armJaguar.set(limit(rightStick.getY()));
+        if(driveState != TANK && rightStick.getY() > 0.1D){
+//            armJaguar.set(limit(rightStick.getY()));
+            if(!limitSwitch.get())
+                armJaguar.set(0.15);
+            else
+                armJaguar.set(limit(rightStick.getY() >= 0.5 ? 0.5 : rightStick.getY()));
         } else
             armJaguar.set(0.0);
+    }
+    
+    //Testing the sensor
+    private void checkArmSensor(){
+        System.out.println("Arm Sensor: "+armSensor.get());
     }
     
     // square the inputs (while preserving the sign) to increase fine control while permitting full power
