@@ -14,6 +14,11 @@ The two right motors are connected for victors on ports 2 and 4
 *****************************************************************************/
 
 public class RobotMain extends IterativeRobot {
+    //Arm static variables
+    final static double ARM_MAX = 0.5;
+    final static double ARM_JOYSTICK_MIN = 0.1;
+    final static double ARM_FREEZE = 0.15;
+
 
     final static int ARCADE = 1;
     final static int TANK = 2;
@@ -106,14 +111,13 @@ public class RobotMain extends IterativeRobot {
     }
 
     private void moveArm(){
-        if(driveState != TANK && rightStick.getY() > 0.1D){
-//            armJaguar.set(limit(rightStick.getY()));
-            if(!limitSwitch.get())
-                armJaguar.set(0.15);
+        if(driveState != TANK && rightStick.getY() > ARM_JOYSTICK_MIN){ //Check if in the correct Drive State and the joystick is not at rest
+            if(!limitSwitch.get()) //If it is touching the limit switch (i.e. At it's max height)
+                armJaguar.set(ARM_FREEZE); //Set it to a small current so that it doesn't fall down
             else
-                armJaguar.set(limit(rightStick.getY() >= 0.5 ? 0.5 : rightStick.getY()));
+                armJaguar.set(rightStick.getY() >= ARM_MAX ? ARM_MAX : rightStick.getY()); //Move the arm at the speed between 0.1 and 0.5
         } else
-            armJaguar.set(0.0);
+            armJaguar.set(0.0); //Let it fall down freely
     }
     
     //Testing the sensor
