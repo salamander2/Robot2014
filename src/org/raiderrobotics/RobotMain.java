@@ -89,6 +89,7 @@ public class RobotMain extends IterativeRobot {
     }
     
     // drive the robot normally
+    //led lighting ports here
     private void normalDrive() {
         if (driveState == ARCADE) {
             driveTrain1.arcadeDrive(leftStick);
