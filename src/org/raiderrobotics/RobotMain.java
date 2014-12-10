@@ -45,9 +45,20 @@ public class RobotMain extends IterativeRobot {
         jag1.enableDeadbandElimination(true);
         ***/
         
-        //reversed the motor to fix the left and right joystick
-        driveTrain1 = new RobotDrive(victor2, victor1);
-        driveTrain2 = new RobotDrive(victor4, victor3);
+        //reversed the motor to fix the left and right joystick. Did not work
+        driveTrain1 = new RobotDrive(victor1, victor2);
+        driveTrain2 = new RobotDrive(victor3, victor4);
+        
+        //this works to fix arcade joystick 
+        driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
+        driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
+        driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
+        driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
+        
+        driveTrain2.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
+        driveTrain2.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
+        driveTrain2.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
+        driveTrain2.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
         
         leftStick = new Joystick(1);
         rightStick = new Joystick(2);
@@ -91,8 +102,10 @@ public class RobotMain extends IterativeRobot {
     // drive the robot normally
     private void normalDrive() {
         if (driveState == ARCADE) {
-            driveTrain1.arcadeDrive(leftStick);
-            driveTrain2.arcadeDrive(leftStick);
+            //driveTrain1.arcadeDrive(leftStick);
+            //driveTrain2.arcadeDrive(leftStick);
+            driveTrain1.arcadeDrive(leftStick, true);
+            driveTrain2.arcadeDrive(leftStick, true); //Use squaredInputs (boolean)
         } else {
             driveTrain1.tankDrive(leftStick, rightStick);
             driveTrain2.tankDrive(leftStick, rightStick);
