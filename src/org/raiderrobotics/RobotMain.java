@@ -51,11 +51,11 @@ public class RobotMain extends IterativeRobot {
         armJaguar.enableDeadbandElimination(true);
         ***/
         
-        driveTrain1 = new RobotDrive(victor2, victor1);
-        driveTrain2 = new RobotDrive(victor4, victor3);
+        driveTrain1 = new RobotDrive(victor1, victor2);
+        driveTrain2 = new RobotDrive(victor3, victor4);
         
-        leftStick = new Joystick(2);
-        rightStick = new Joystick(1);
+        leftStick = new Joystick(1);
+        rightStick = new Joystick(2);
         //stickLBtn1 = new JoystickButton(stickL, 1);
         //stickLBtn2 = new JoystickButton(stickL, 2);
         limitSwitch = new DigitalInput(5);
