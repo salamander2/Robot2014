@@ -30,6 +30,7 @@ public class RobotMain extends IterativeRobot {
     Jaguar armJaguar;
     DigitalInput limitSwitch;
     DigitalInput armSensor;
+    DigitalOutput LED1, LED2;
     //the JoystickButton class does not exist in our Java FRC plugins!
     // JoystickButton stickLBtn1, stickLBtn2; 
 
@@ -60,6 +61,11 @@ public class RobotMain extends IterativeRobot {
         //stickLBtn2 = new JoystickButton(stickL, 2);
         limitSwitch = new DigitalInput(5);
         armSensor = new DigitalInput(10);
+        
+        LED1 = new DigitalOutput(7);
+        LED2 = new DigitalOutput(8);
+        LED1.set(true);
+        LED2.set(false);
     }
 
     public void teleopInit() {
@@ -83,8 +89,16 @@ public class RobotMain extends IterativeRobot {
         //Since joystick button is not loaded ....
         boolean button2 = leftStick.getRawButton(2);
         boolean button3 = leftStick.getRawButton(3);
-        if (button2) driveState = ARCADE;
-        if (button3) driveState = TANK;
+        if (button2) {
+        	driveState = ARCADE;
+        	LED1.set(true);
+        	LED2.set(false);
+        }
+        if (button3) {
+        	driveState = TANK;
+        	LED1.set(false);
+        	LED2.set(true);
+        }
     }
 
     public void autonomousInit() {
