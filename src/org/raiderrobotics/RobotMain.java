@@ -7,7 +7,7 @@
 package org.raiderrobotics;
 
 import edu.wpi.first.wpilibj.*;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /***************************************************************************
 The two left motors are connected to victors on ports 1 and 3
 The two right motors are connected for victors on ports 2 and 4
@@ -121,18 +121,18 @@ public class RobotMain extends IterativeRobot {
     
     public void sendSmartDashboard(){
         //smartDashboardSetup-CURRENTLY UNTESTED
-        SmartDashboard.putNumber("joyRx", rightStick.getX());
-        SmartDashboard.putNumber("joyLx", leftStick.getX());
-        SmartDashboard.putNumber("joyRy", rightStick.getY());
-        SmartDashboard.putNumber("joyLy", leftStick.getY());
+        SmartDashboard.putDouble("joyRx", rightStick.getX());
+        SmartDashboard.putDouble("joyLx", leftStick.getX());
+        SmartDashboard.putDouble("joyRy", rightStick.getY());
+        SmartDashboard.putDouble("joyLy", leftStick.getY());
         SmartDashboard.putBoolean("btn2",leftStick.getRawButton(2));
         SmartDashboard.putBoolean("btn3",leftStick.getRawButton(3));
         
-        SmartDashboard.putNumber("vic1",victor1.get());
-        SmartDashboard.putNumber("vic2",victor2.get());
-        SmartDashboard.putNumber("vic3",victor3.get());
-        SmartDashboard.putNumber("vic4",victor4.get());
-        SmartDashboard.putNumber("jagArm",jag1.get());
+        SmartDashboard.putDouble("vic1",victor1.get());
+        SmartDashboard.putDouble("vic2",victor2.get());
+        SmartDashboard.putDouble("vic3",victor3.get());
+        SmartDashboard.putDouble("vic4",victor4.get());
+        SmartDashboard.putDouble("jagArm",jag1.get());
         if(driveState==ARCADE){    
             SmartDashboard.putString("driveState","Arcade");
         }else{
