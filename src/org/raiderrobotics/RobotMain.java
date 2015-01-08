@@ -30,6 +30,9 @@ public class RobotMain extends IterativeRobot {
     //global variables
     private int driveState = ARCADE;
 
+    //vars for smart dashboard xbox switching;
+    Preferences prefs;
+    Boolean xboxControl;
     //create global objects here
     public void robotInit() {
         victor1 = new Victor(1);
@@ -45,6 +48,7 @@ public class RobotMain extends IterativeRobot {
         jag1.enableDeadbandElimination(true);
         ***/
         
+        
         //reversed the motor to fix the left and right joystick
         driveTrain1 = new RobotDrive(victor2, victor1);
         driveTrain2 = new RobotDrive(victor4, victor3);
@@ -54,6 +58,7 @@ public class RobotMain extends IterativeRobot {
         //stickLBtn1 = new JoystickButton(stickL, 1);
         //stickLBtn2 = new JoystickButton(stickL, 2);
         limitSwitch = new DigitalInput(5);
+        xboxControl = prefs.getBoolean("Xbox Control Mechanism",false);
     }
 
     public void teleopInit() {
@@ -93,13 +98,31 @@ public class RobotMain extends IterativeRobot {
     
     // drive the robot normally
     private void normalDrive() {
-        if (driveState == ARCADE) {
+        if (driveState == ARCADE && xboxControl == false) {
             driveTrain1.arcadeDrive(leftStick);
             driveTrain2.arcadeDrive(leftStick);
-        } else {
+        } else if(driveState==TANK && xboxControl == false) {
             driveTrain1.tankDrive(leftStick, rightStick);
             driveTrain2.tankDrive(leftStick, rightStick);
+        }else if (driveState == ARCADE && xboxControl == true) {
+            driveTrain1.arcadeDrive(leftStick.getRawAxis(2),leftStick.getRawAxis(1),true);
+            driveTrain2.arcadeDrive(leftStick.getRawAxis(2),leftStick.getRawAxis(1),true);
+        } else if(driveState==TANK && xboxControl == true) {
+            driveTrain1.tankDrive(leftStick.getRawAxis(2), leftStick.getRawAxis(5));
+            driveTrain2.tankDrive(leftStick.getRawAxis(2), leftStick.getRawAxis(5));
         }
+        /*Raw Axis Index for Xbox are as follows :
+			1 - LeftX
+			2 - LeftY
+			3 - Triggers (Each trigger = 0 to 1, axis value = right - left)
+			4 - RightX
+			5 - RightY
+			6 - DPad Left/Right
+			The code above checks which mode the robot is in, and if there is xbox control. 
+			It proceeds as normal if there is no xbox control
+			However, if there is xbox control, the arcade drives are made using raw double values instead of a joystick class. 
+			These values are gotten using get raw axis on the left stick.
+       */
     }
     
     // square the inputs (while preserving the sign) to increase fine control while permitting full power
