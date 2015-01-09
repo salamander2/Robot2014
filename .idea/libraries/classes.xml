@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="classes">
+    <CLASSES>
+      <root url="jar://C:/programming/lib/FRC/classes.jar!/" />
+      <root url="jar://C:/programming/lib/FRC/squawk_device.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://C:/programming/lib/FRC/classes.jar!/" />
+    </SOURCES>
+  </library>
+</component>
