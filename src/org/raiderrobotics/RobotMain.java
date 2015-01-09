@@ -7,7 +7,7 @@
 package org.raiderrobotics;
 
 import edu.wpi.first.wpilibj.*;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /***************************************************************************
 The two left motors are connected to victors on ports 1 and 3
 The two right motors are connected for victors on ports 2 and 4
@@ -36,6 +36,9 @@ public class RobotMain extends IterativeRobot {
     //global variables
     private int driveState = ARCADE;
 
+    //vars for smart dashboard xbox switching;
+    Preferences prefs;
+    Boolean xboxControl;
     //create global objects here
     public void robotInit() {
         victor1 = new Victor(1);
@@ -59,6 +62,7 @@ public class RobotMain extends IterativeRobot {
         //stickLBtn1 = new JoystickButton(stickL, 1);
         //stickLBtn2 = new JoystickButton(stickL, 2);
         limitSwitch = new DigitalInput(5);
+        xboxControl = prefs.getBoolean("Xbox Control Mechanism",false);
         armSensor = new DigitalInput(10);
     }
 
@@ -76,7 +80,8 @@ public class RobotMain extends IterativeRobot {
 //        checkArmSensor(); //Remove for now
         
         //publicDrive();
-        
+        sendSmartDashboard();
+
         //check for button press to switch mode. Use two buttons to prevent bounce.
         //if (joyLeftBtn2.get()) driveState = ARCADE;
         //if (joyLeftBtn3.get()) driveState = TANK;
@@ -92,7 +97,7 @@ public class RobotMain extends IterativeRobot {
     }
 
     public void autonomousPeriodic() {
-        
+        sendSmartDashboard();
     }
 
     public void autonomousDisabled() {
@@ -101,13 +106,31 @@ public class RobotMain extends IterativeRobot {
     
     // drive the robot normally
     private void normalDrive() {
-        if (driveState == ARCADE) {
+        if (driveState == ARCADE && xboxControl == false) {
             driveTrain1.arcadeDrive(leftStick);
             driveTrain2.arcadeDrive(leftStick);
-        } else {
+        } else if(driveState==TANK && xboxControl == false) {
             driveTrain1.tankDrive(leftStick, rightStick);
             driveTrain2.tankDrive(leftStick, rightStick);
+        }else if (driveState == ARCADE && xboxControl == true) {
+            driveTrain1.arcadeDrive(leftStick.getRawAxis(2),leftStick.getRawAxis(1),true);
+            driveTrain2.arcadeDrive(leftStick.getRawAxis(2),leftStick.getRawAxis(1),true);
+        } else if(driveState==TANK && xboxControl == true) {
+            driveTrain1.tankDrive(leftStick.getRawAxis(2), leftStick.getRawAxis(5));
+            driveTrain2.tankDrive(leftStick.getRawAxis(2), leftStick.getRawAxis(5));
         }
+        /*Raw Axis Index for Xbox are as follows :
+			1 - LeftX
+			2 - LeftY
+			3 - Triggers (Each trigger = 0 to 1, axis value = right - left)
+			4 - RightX
+			5 - RightY
+			6 - DPad Left/Right
+			The code above checks which mode the robot is in, and if there is xbox control. 
+			It proceeds as normal if there is no xbox control
+			However, if there is xbox control, the arcade drives are made using raw double values instead of a joystick class. 
+			These values are gotten using get raw axis on the left stick.
+       */
     }
 
     private void moveArm(){
@@ -135,5 +158,27 @@ public class RobotMain extends IterativeRobot {
         if (num > 1.0) return 1.0;
         if (num < -1.0) return -1.0;
         return num;
+    }
+    
+    public void sendSmartDashboard(){
+        //smartDashboardSetup-CURRENTLY UNTESTED
+        SmartDashboard.putDouble("joyRx", rightStick.getX());
+        SmartDashboard.putDouble("joyLx", leftStick.getX());
+        SmartDashboard.putDouble("joyRy", rightStick.getY());
+        SmartDashboard.putDouble("joyLy", leftStick.getY());
+        SmartDashboard.putBoolean("btn2",leftStick.getRawButton(2));
+        SmartDashboard.putBoolean("btn3",leftStick.getRawButton(3));
+        
+        SmartDashboard.putDouble("vic1",victor1.get());
+        SmartDashboard.putDouble("vic2",victor2.get());
+        SmartDashboard.putDouble("vic3",victor3.get());
+        SmartDashboard.putDouble("vic4",victor4.get());
+        SmartDashboard.putDouble("jagArm",jag1.get());
+        if(driveState==ARCADE){    
+            SmartDashboard.putString("driveState","Arcade");
+        }else{
+            SmartDashboard.putString("driveState","Tank Drive");
+        }
+        SmartDashboard.putBoolean("limitSwitch",limitSwitch.get());
     }
 }
