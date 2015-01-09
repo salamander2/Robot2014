@@ -3,10 +3,6 @@ package org.raiderrobotics;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 
-/**
- * Author: toropov023
- * Date: 09/01/2015
- */
 public class QuickTurnExecutor {
     Joystick joystick;
     RobotMain main;
@@ -19,10 +15,10 @@ public class QuickTurnExecutor {
     //Joystick buttons matrix
     int[][] buttons = new int[][]{
             //Button number | Turn degree | turn for DriveTrain1 | turn for DriveTrain2
-            {1, -90, -1, 1}, //90 Left
-            {2, -180, -1, 1}, //180 Left
-            {3, 90, 1, -1}, //90 Right
-            {4, 180, 1, -1} //180 Right
+            {5, -90, 1}, //90 Left
+            {3, -180, 1}, //180 Left
+            {6, 90, -1}, //90 Right
+            {4, 180, -1} //180 Right
     };
 
     //Quick turn dynamic state variables
@@ -36,15 +32,17 @@ public class QuickTurnExecutor {
     }
 
     public void check() {
-        for (int[] button : buttons) { //Loop through all buttons
-            int id = button[0];
+        for(int i=0; i<buttons.length; i++){ //Loop through all buttons
+            int id = buttons[i][0];
+            System.out.print("Buton "+id+" : "+joystick.getRawButton(id));
             if (joystick.getRawButton(id)) { //Find one that's pressed
 
-                if(buttonPressed != id) //If first time button was pressed
+                if(buttonPressed != id) //If it id the first time button was pressed
                     gyro.reset(); //Reset Gyro for better results
 
                 buttonPressed = id;
-                turn(button);
+                System.out.println("Button pressed: "+buttonPressed);
+                turn(buttons[i]);
                 return;
             }
         }
@@ -58,9 +56,11 @@ public class QuickTurnExecutor {
             return;
 
         if(button[1] - gyro.getAngle() < 0){ //If not in position yet
-            main.driveTrain1.drive(button[2]*turnSpeed, 0);
-            main.driveTrain2.drive(button[3]*turnSpeed, 0);
+            System.out.println("Rotating");
+            main.driveTrain1.drive(button[2]*turnSpeed, 1);
+            main.driveTrain2.drive(button[2]*turnSpeed, 1);
         } else { //If the rotation is complete
+            System.out.println("not Rotating");
             complete = true;
             main.driveTrain1.drive(0, 0);
             main.driveTrain2.drive(0, 0);
