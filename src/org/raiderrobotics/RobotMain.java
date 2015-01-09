@@ -14,6 +14,11 @@ The two right motors are connected for victors on ports 2 and 4
 *****************************************************************************/
 
 public class RobotMain extends IterativeRobot {
+    //Arm static variables
+    final static double ARM_MAX = 0.5;
+    final static double ARM_JOYSTICK_MIN = 0.1;
+    final static double ARM_FREEZE = 0.15;
+
 
     final static int ARCADE = 1;
     final static int TANK = 2;
@@ -22,8 +27,9 @@ public class RobotMain extends IterativeRobot {
     Joystick leftStick, rightStick;
     RobotDrive driveTrain1, driveTrain2;
     Victor victor1, victor2, victor3, victor4;
-    Jaguar jag1;
+    Jaguar armJaguar;
     DigitalInput limitSwitch;
+    DigitalInput armSensor;
     //the JoystickButton class does not exist in our Java FRC plugins!
     // JoystickButton stickLBtn1, stickLBtn2; 
 
@@ -39,19 +45,17 @@ public class RobotMain extends IterativeRobot {
         victor2 = new Victor(2);
         victor3 = new Victor(3);
         victor4 = new Victor(4);
-        jag1 = new Jaguar(10); //for the arm
+        armJaguar = new Jaguar(10); //for the arm
         /*** do the following lines do anything? 
         victor1.enableDeadbandElimination(true);
         victor2.enableDeadbandElimination(true);
         victor3.enableDeadbandElimination(true);
         victor4.enableDeadbandElimination(true);
-        jag1.enableDeadbandElimination(true);
+        armJaguar.enableDeadbandElimination(true);
         ***/
         
-        
-        //reversed the motor to fix the left and right joystick
-        driveTrain1 = new RobotDrive(victor2, victor1);
-        driveTrain2 = new RobotDrive(victor4, victor3);
+        driveTrain1 = new RobotDrive(victor1, victor2);
+        driveTrain2 = new RobotDrive(victor3, victor4);
         
         leftStick = new Joystick(1);
         rightStick = new Joystick(2);
@@ -59,6 +63,7 @@ public class RobotMain extends IterativeRobot {
         //stickLBtn2 = new JoystickButton(stickL, 2);
         limitSwitch = new DigitalInput(5);
         xboxControl = prefs.getBoolean("Xbox Control Mechanism",false);
+        armSensor = new DigitalInput(10);
     }
 
     public void teleopInit() {
@@ -71,6 +76,9 @@ public class RobotMain extends IterativeRobot {
         Watchdog.getInstance().feed();
 
         normalDrive();
+        moveArm();
+//        checkArmSensor(); //Remove for now
+        
         //publicDrive();
         sendSmartDashboard();
 
@@ -124,15 +132,25 @@ public class RobotMain extends IterativeRobot {
 			These values are gotten using get raw axis on the left stick.
        */
     }
+
+    private void moveArm(){
+        if(driveState != TANK && rightStick.getY() > ARM_JOYSTICK_MIN){ //Check if in the correct Drive State and the joystick is not at rest
+            if(!limitSwitch.get()) //If it is touching the limit switch (i.e. At it's max height)
+                armJaguar.set(ARM_FREEZE); //Set it to a small current so that it doesn't fall down
+            else
+                armJaguar.set(rightStick.getY() >= ARM_MAX ? ARM_MAX : rightStick.getY()); //Move the arm at the speed between 0.1 and 0.5
+        } else
+            armJaguar.set(0.0); //Let it fall down freely
+    }
+    
+    //Testing the sensor
+    private void checkArmSensor(){
+        System.out.println("Arm Sensor: "+armSensor.get());
+    }
     
     // square the inputs (while preserving the sign) to increase fine control while permitting full power
     double squareInputs(double input) {
-        if (input >= 0.0) {
-            input = (input * input);
-        } else {
-            input = -(input * input);
-        }
-        return input;
+        return Math.abs(input) * input;
     }
     
     //limit values so that they are always between -1.0 and +1.0
