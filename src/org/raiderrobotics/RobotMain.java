@@ -178,7 +178,7 @@ public class RobotMain extends IterativeRobot {
         SmartDashboard.putDouble("vic2",victor2.get());
         SmartDashboard.putDouble("vic3",victor3.get());
         SmartDashboard.putDouble("vic4",victor4.get());
-        SmartDashboard.putDouble("jagArm",jag1.get());
+        SmartDashboard.putDouble("jagArm",armJaguar.get());
         if(driveState==ARCADE){    
             SmartDashboard.putString("driveState","Arcade");
         }else{
@@ -186,5 +186,4 @@ public class RobotMain extends IterativeRobot {
         }
         SmartDashboard.putBoolean("limitSwitch",limitSwitch.get());
     }
-        SmartDashboard.putDouble("jagArm",armJaguar.get());
 }
