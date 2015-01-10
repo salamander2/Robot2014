@@ -74,8 +74,11 @@ public class RobotMain extends IterativeRobot {
         // feed the watchdog
         Watchdog.getInstance().feed();
 
-        normalDriveJ();
-        //normalDriveX();
+	if (xboxControl)
+        	normalDriveX();
+        else
+        	normalDriveJ();
+        	
         moveArm();
 //        checkArmSensor(); //Remove for now
         
