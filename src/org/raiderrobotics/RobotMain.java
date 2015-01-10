@@ -74,7 +74,8 @@ public class RobotMain extends IterativeRobot {
         // feed the watchdog
         Watchdog.getInstance().feed();
 
-        normalDrive();
+        normalDriveJ();
+        //normalDriveX();
         moveArm();
 //        checkArmSensor(); //Remove for now
         
@@ -103,15 +104,20 @@ public class RobotMain extends IterativeRobot {
         //turn off motors here
     }
     
-    // drive the robot normally
-    private void normalDrive() {
+    // drive the robot normally w/ joystick
+    private void normalDriveJ() {
         if (driveState == ARCADE && xboxControl == false) {
             driveTrain1.arcadeDrive(leftStick);
             driveTrain2.arcadeDrive(leftStick);
         } else if(driveState==TANK && xboxControl == false) {
             driveTrain1.tankDrive(leftStick, rightStick);
             driveTrain2.tankDrive(leftStick, rightStick);
-        }else if (driveState == ARCADE && xboxControl == true) {
+        }
+    }
+    
+    //drive the robot normally w/ Xbox controller
+    private void normalDriveX(){    
+        if (driveState == ARCADE && xboxControl == true) {
             driveTrain1.arcadeDrive(leftStick.getRawAxis(2),leftStick.getRawAxis(1),true);
             driveTrain2.arcadeDrive(leftStick.getRawAxis(2),leftStick.getRawAxis(1),true);
         } else if(driveState==TANK && xboxControl == true) {
