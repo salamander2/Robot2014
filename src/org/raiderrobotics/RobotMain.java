@@ -36,9 +36,8 @@ public class RobotMain extends IterativeRobot {
     //global variables
     private int driveState = ARCADE;
 
-    //vars for smart dashboard xbox switching;
-    Preferences prefs;
-    Boolean xboxControl;
+    boolean xboxControl;
+    Preferences prefs;    
     //create global objects here
     public void robotInit() {
         victor1 = new Victor(1);
@@ -181,4 +180,5 @@ public class RobotMain extends IterativeRobot {
         }
         SmartDashboard.putBoolean("limitSwitch",limitSwitch.get());
     }
+        SmartDashboard.putDouble("jagArm",armJaguar.get());
 }
