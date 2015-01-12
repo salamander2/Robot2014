@@ -109,10 +109,10 @@ public class RobotMain extends IterativeRobot {
     
     // drive the robot normally w/ joystick
     private void normalDriveJ() {
-        if (driveState == ARCADE && xboxControl == false) {
+        if (driveState == ARCADE) {
             driveTrain1.arcadeDrive(leftStick);
             driveTrain2.arcadeDrive(leftStick);
-        } else if(driveState==TANK && xboxControl == false) {
+        } else if(driveState==TANK) {
             driveTrain1.tankDrive(leftStick, rightStick);
             driveTrain2.tankDrive(leftStick, rightStick);
         }
@@ -120,10 +120,10 @@ public class RobotMain extends IterativeRobot {
     
     //drive the robot normally w/ Xbox controller
     private void normalDriveX(){    
-        if (driveState == ARCADE && xboxControl == true) {
+        if (driveState == ARCADE) {
             driveTrain1.arcadeDrive(leftStick.getRawAxis(2),leftStick.getRawAxis(1),true);
             driveTrain2.arcadeDrive(leftStick.getRawAxis(2),leftStick.getRawAxis(1),true);
-        } else if(driveState==TANK && xboxControl == true) {
+        } else if(driveState==TANK) {
             driveTrain1.tankDrive(leftStick.getRawAxis(2), leftStick.getRawAxis(5));
             driveTrain2.tankDrive(leftStick.getRawAxis(2), leftStick.getRawAxis(5));
         }
