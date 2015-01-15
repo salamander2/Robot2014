@@ -14,3 +14,10 @@ hs_err_pid*
 #added by Mr. H. for Netbeans
 nbproject/private/
 build/
+build.xml
+
+#Intellij
+*.iml
+*.ipr
+*.iws
+.idea/
